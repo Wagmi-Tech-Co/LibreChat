@@ -290,12 +290,89 @@ html {
 
 @font-face {
   font-display: swap;
+  font-family: Poppins;
+  font-style: normal;
+  font-weight: 400;
+  src: url('$fonts/Poppins-Regular.ttf') format('ttf');
+  size-adjust: 94%;
+}
+@font-face {
+  font-display: swap;
+  font-family: Poppins;
+  font-style: italic;
+  font-weight: 400;
+  src: url('$fonts/Poppins-Italic.ttf') format('ttf');
+  size-adjust: 94%;
+}
+
+@font-face {
+  font-display: swap;
+  font-family: Poppins;
+  font-style: normal;
+  font-weight: 500;
+  src: url('$fonts/Poppins-Medium.ttf') format('ttf');
+  size-adjust: 94%;
+}
+
+@font-face {
+  font-display: swap;
+  font-family: Poppins;
+  font-style: italic;
+  font-weight: 500;
+  src: url('$fonts/Poppins-MediumItalic.ttf') format('ttf');
+  size-adjust: 94%;
+}
+
+
+@font-face {
+  font-display: swap;
+  font-family: Poppins;
+  font-style: normal;
+  font-weight: 600;
+  src: url('$fonts/Poppins-SemiBold.ttf') format('ttf');
+  size-adjust: 94%;
+}
+
+@font-face {
+  font-display: swap;
+  font-family: Poppins;
+  font-style: italic;
+  font-weight: 600;
+  src: url('$fonts/Poppins-SemiBoldItalic.ttf') format('ttf');
+  size-adjust: 94%;
+}
+
+
+@font-face {
+  font-display: swap;
+  font-family: Poppins;
+  font-style: normal;
+  font-weight: 700;
+  src: url('$fonts/Poppins-Bold.ttf') format('ttf');
+  size-adjust: 94%;
+}
+
+@font-face {
+  font-display: swap;
+  font-family: Poppins;
+  font-style: italic;
+  font-weight: 700;
+  src: url('$fonts/Poppins-BoldItalic.ttf') format('ttf');
+  size-adjust: 94%;
+}
+
+
+
+
+@font-face {
+  font-display: swap;
   font-family: Inter;
   font-style: normal;
   font-weight: 400;
   src: url('$fonts/Inter-Regular.woff2') format('woff2');
   size-adjust: 94%;
 }
+
 
 @font-face {
   font-display: swap;
