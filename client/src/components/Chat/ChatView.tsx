@@ -71,7 +71,9 @@ function ChatView({ index = 0 }: { index?: number }) {
   } else if (!isLandingPage) {
     content = <MessagesView messagesTree={messagesTree} />;
   } else {
-    content = <Landing centerFormOnLanding={centerFormOnLanding} />;
+    // content = <Landing centerFormOnLanding={centerFormOnLanding} />;
+    // for testing purposes  make landing static content
+  // content  
   }
 
   return (
@@ -79,30 +81,49 @@ function ChatView({ index = 0 }: { index?: number }) {
       <ChatContext.Provider value={chatHelpers}>
         <AddedChatContext.Provider value={addedChatHelpers}>
           <Presentation>
-            <div className="flex h-full w-full flex-col">
-              {!isLoading && <Header />}
-              <>
-                <div
-                  className={cn(
-                    'flex flex-col',
-                    isLandingPage
-                      ? 'flex-1 items-center justify-end sm:justify-center'
-                      : 'h-full overflow-y-auto',
-                  )}
+            <div className="flex h-full w-full flex-col relative">
+              {/* Video Background */}
+              <div className="absolute inset-0 z-0 overflow-hidden">
+                <video 
+                  className="h-full w-full object-cover"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
                 >
-                  {content}
+                  <source src="/assets/Arka-Plan.mp4" type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+                {/* Optional overlay to ensure text remains readable */}
+                <div className="absolute inset-0 bg-black bg-opacity-30"></div>
+              </div>
+              
+              {/* Content (now with relative z-index to appear above video) */}
+              <div className="relative z-10 flex flex-col h-full w-full">
+                {!isLoading && <Header />}
+                <>
                   <div
                     className={cn(
-                      'w-full',
-                      isLandingPage && 'max-w-3xl transition-all duration-200 xl:max-w-4xl',
+                      'flex flex-col',
+                      isLandingPage
+                        ? 'flex-1 items-center justify-end sm:justify-center'
+                        : 'h-full overflow-y-auto'
                     )}
                   >
-                    <ChatForm index={index} />
-                    {isLandingPage ? <ConversationStarters /> : <Footer />}
+                    {content}
+                    <div
+                      className={cn(
+                        'w-full',
+                        isLandingPage && 'max-w-3xl transition-all duration-200 xl:max-w-4xl'
+                      )}
+                    >
+                      <ChatForm index={index} />
+                      {isLandingPage ? <ConversationStarters /> : <Footer />}
+                    </div>
                   </div>
-                </div>
-                {isLandingPage && <Footer />}
-              </>
+                  {isLandingPage && <Footer />}
+                </>
+              </div>
             </div>
           </Presentation>
         </AddedChatContext.Provider>
