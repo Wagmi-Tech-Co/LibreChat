@@ -39,8 +39,10 @@ export default function Footer({ className }: { className?: string }) {
       ? config.customFooter
       : '[WagmiTech ' +
         "v1.0" +
-        '](https://librechat.ai) - ' +
-        localize('com_ui_latest_footer')
+        '](https://www.wagmi.tech) - ' + 
+        localize('com_ui_latest_footer') +
+        ' | ' + '[' + localize('com_ui_privacy_policy') +
+        '](https://www.wagmi.tech)'
   ).split('|');
 
   useEffect(() => {
