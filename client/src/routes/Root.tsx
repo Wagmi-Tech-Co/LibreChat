@@ -64,8 +64,38 @@ export default function Root() {
         <AssistantsMapContext.Provider value={assistantsMap}>
           <AgentsMapContext.Provider value={agentsMap}>
             <Banner onHeightChange={setBannerHeight} />
-            <div className="flex" style={{ height: `calc(100dvh - ${bannerHeight}px)` }}>
+            <div 
+              className="flex"
+              style={{ height: `calc(100dvh - ${bannerHeight}px)` }}
+            >
               <div className="relative z-0 flex h-full w-full overflow-hidden">
+                {/* Video Background with Filter */}
+                <div className="absolute inset-0 z-0 overflow-hidden">
+                  <video
+                    className="h-full w-full object-cover opacity-25"
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                  >
+                    <source src="/assets/Arka-Plan.mp4" type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                  
+                  {/* Dotted pattern overlay */}
+                  <div 
+                    className="absolute inset-0"
+                    style={{
+                        backgroundImage: 'url(https://static.wixstatic.com/media/0da768_880a3209e3744cd0a96b66835a01b8c5.png/v1/crop/x_0,y_0,w_256,h_256,q_85,enc_auto/0da768_880a3209e3744cd0a96b66835a01b8c5.png)',
+                        backgroundSize: "auto",
+                        backgroundRepeat: "repeat",
+                        backgroundPosition: 'center center',
+                      // backgroundImage: `url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%236b7280' fill-opacity='0.3' fill-rule='evenodd'%3E%3Ccircle cx='1' cy='1' r='1'/%3E%3Ccircle cx='5' cy='5' r='1'/%3E%3Ccircle cx='10' cy='10' r='1'/%3E%3Ccircle cx='15' cy='15' r='1'/%3E%3Ccircle cx='5' cy='15' r='1'/%3E%3Ccircle cx='15' cy='5' r='1'/%3E%3C/g%3E%3C/svg%3E")`,
+                      // pointerEvents: 'none'
+                    }} 
+                  />
+                </div>
+
                 <Nav navVisible={navVisible} setNavVisible={setNavVisible} />
                 <div className="relative flex h-full max-w-full flex-1 flex-col overflow-hidden">
                   <MobileNav setNavVisible={setNavVisible} />

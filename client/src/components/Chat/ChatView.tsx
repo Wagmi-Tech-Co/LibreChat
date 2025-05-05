@@ -81,23 +81,8 @@ function ChatView({ index = 0 }: { index?: number }) {
       <ChatContext.Provider value={chatHelpers}>
         <AddedChatContext.Provider value={addedChatHelpers}>
           <Presentation>
-            <div className="flex h-full w-full flex-col relative">
-              {/* Video Background */}
-              <div className="absolute inset-0 z-0 overflow-hidden">
-                <video 
-                  className="h-full w-full object-cover"
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                >
-                  <source src="/assets/Arka-Plan.mp4" type="video/mp4" />
-                  Your browser does not support the video tag.
-                </video>
-                {/* Optional overlay to ensure text remains readable */}
-                <div className="absolute inset-0 bg-black bg-opacity-30"></div>
-              </div>
-              
+            <div className="flex h-full w-full flex-col relative"
+            >
               {/* Content (now with relative z-index to appear above video) */}
               <div className="relative z-10 flex flex-col h-full w-full">
                 {!isLoading && <Header />}
