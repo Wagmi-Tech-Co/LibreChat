@@ -86,12 +86,11 @@ export default function Root() {
                   <div 
                     className="absolute inset-0"
                     style={{
-                        backgroundImage: 'url(https://static.wixstatic.com/media/0da768_880a3209e3744cd0a96b66835a01b8c5.png/v1/crop/x_0,y_0,w_256,h_256,q_85,enc_auto/0da768_880a3209e3744cd0a96b66835a01b8c5.png)',
+                        backgroundImage: 'url(/assets/background_filter.png)',
                         backgroundSize: "auto",
                         backgroundRepeat: "repeat",
                         backgroundPosition: 'center center',
-                      // backgroundImage: `url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%236b7280' fill-opacity='0.3' fill-rule='evenodd'%3E%3Ccircle cx='1' cy='1' r='1'/%3E%3Ccircle cx='5' cy='5' r='1'/%3E%3Ccircle cx='10' cy='10' r='1'/%3E%3Ccircle cx='15' cy='15' r='1'/%3E%3Ccircle cx='5' cy='15' r='1'/%3E%3Ccircle cx='15' cy='5' r='1'/%3E%3C/g%3E%3C/svg%3E")`,
-                      // pointerEvents: 'none'
+                
                     }} 
                   />
                 </div>
