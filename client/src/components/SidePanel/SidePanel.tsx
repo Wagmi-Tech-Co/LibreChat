@@ -116,6 +116,10 @@ const SidePanel = ({
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
         className="relative flex w-px items-center justify-center"
+        style={{
+          background: 'transparent',
+        }}
+        
       >
         <NavToggle
           navVisible={!isCollapsed}

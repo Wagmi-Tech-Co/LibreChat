@@ -189,10 +189,15 @@ const Nav = memo(
             'nav active max-w-[320px] flex-shrink-0 overflow-x-hidden bg-surface-primary-alt',
             'md:max-w-[260px]',
           )}
+          // add style
           style={{
             width: navVisible ? navWidth : '0px',
             visibility: navVisible ? 'visible' : 'hidden',
             transition: 'width 0.2s, visibility 0.2s',
+            backgroundColor: 'rgba(255, 255, 255, 0.25)',
+            backdropFilter: 'blur(8px)',
+            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+            borderRight: '1px solid rgba(255, 255, 255, 0.18)'
           }}
         >
           <div className="h-full w-[320px] md:w-[260px]">
