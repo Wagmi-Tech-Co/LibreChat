@@ -18,17 +18,17 @@
   --gray-800: #212121;
   --gray-850: #171717;
   --gray-900: #0d0d0d;
-  --green-50: #ecfdf5;
-  --green-100: #d1fae5;
-  --green-200: #a7f3d0;
-  --green-300: #6ee7b7;
-  --green-400: #34d399;
-  --green-500: #10b981;
-  --green-600: #059669;
-  --green-700: #047857;
-  --green-800: #065f46;
-  --green-900: #064e3b;
-  --green-950: #022c22;
+  --green-50: #f5f5ff;
+  --green-100: #e6e7ff;
+  --green-200: #cdceff;
+  --green-300: #b4b6ff;
+  --green-400: #9b9dff;
+  --green-500: #2D31FA;
+  --green-600: #2428e1;
+  --green-700: #1b1fc8;
+  --green-800: #1216af;
+  --green-900: #090d96;
+  --green-950: #00047d;
   --red-50: #fef2f2;
   --red-100: #fee2e2;
   --red-200: #fecaca;
@@ -545,7 +545,7 @@ Step 5: rebuild frontend code: `npm run frontend` (or rebuild docker).
 
 /* * {
   box-sizing: border-box;
-  outline: 1px solid limegreen !important;
+  outline: 1px solid #2D31FA !important;
 } */
 
 /* p small {
