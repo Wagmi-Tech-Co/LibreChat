@@ -36,6 +36,7 @@ export default function NavToggle({
         '-translate-y-1/2 transition-transform',
         navVisible ? 'rotate-0' : 'rotate-180',
         navVisible && translateX ? 'translate-x-[260px]' : 'translate-x-0 ',
+        'pointer-events-auto'
       )}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}

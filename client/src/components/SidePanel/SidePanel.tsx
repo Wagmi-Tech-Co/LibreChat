@@ -117,6 +117,8 @@ const SidePanel = ({
         className="relative flex w-px items-center justify-center"
         style={{
           background: 'transparent',
+          zIndex: 100,
+          pointerEvents: 'auto'
         }}
         
       >
