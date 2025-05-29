@@ -1,8 +1,13 @@
+
+
+````markdown
 # LibreChat & RAG API Database Documentation
 
 ## Overview
 
-LibreChat uses MongoDB to store conversations and messages, and PostgreSQL (with pgvector extension) to store vector embeddings for Retrieval-Augmented Generation RAG API.
+LibreChat uses MongoDB to store conversations and messages, and PostgreSQL (with pgvector extension) to store vector embeddings for Retrieval-Augmented Generation (RAG) API.
+
+---
 
 ## MongoDB Schema
 
@@ -44,27 +49,33 @@ LibreChat uses MongoDB to store conversations and messages, and PostgreSQL (with
 * **unfinished** (boolean): Whether response was truncated.
 * **Additional fields**: \_meiliIndex (boolean), expiredAt (ISODate), \_\_v (number).
 
+---
+
 ## PostgreSQL Schema (RAG Vector Store)
 
-### pg\_collection
+### pg_collection
 
 * **uuid** (UUID, PRIMARY KEY): Unique identifier for the collection.
 * **name** (text): Collection name.
 * **cmetadata** (JSONB, optional): Collection metadata.
 
-### pg\_embedding
+### pg_embedding
 
 * **uuid** (UUID, PRIMARY KEY): Unique identifier for the embedding.
-* **collection\_id** (UUID, FOREIGN KEY → pg\_collection.uuid): Parent collection reference.
+* **collection_id** (UUID, FOREIGN KEY → pg_collection.uuid): Parent collection reference.
 * **document** (text): Original document or text snippet.
 * **embedding** (vector): Vector embedding representation.
 * **cmetadata** (JSONB, optional): Embedding metadata.
-* **custom\_id** (UUID, optional): User-supplied identifier.
+* **custom_id** (UUID, optional): User-supplied identifier.
+
+---
 
 ## Entity Relationships
 
 * One conversation has many messages (MongoDB).
 * One collection has many embeddings (PostgreSQL).
+
+---
 
 ## Sample Queries
 
@@ -74,7 +85,7 @@ LibreChat uses MongoDB to store conversations and messages, and PostgreSQL (with
 // Fetch a conversation and its messages
 const conv = db.conversations.findOne({ conversationId: '...' });
 const msgs = db.messages.find({ _id: { $in: conv.messages } }).sort({ createdAt: 1 });
-```
+````
 
 ### PostgreSQL with pgvector
 
@@ -93,4 +104,22 @@ WHERE collection_id = '...'
 ORDER BY distance
 LIMIT 5;
 ```
+
+---
+
+## RAG API Configuration Environment Variables
+
+* **RAG\_OPENAI\_API\_KEY**: The API key for OpenAI embeddings. Overrides `OPENAI_API_KEY` to prevent conflicts with LibreChat credentials.
+* **RAG\_PORT**: The port number where the RAG API server runs. Default is `8000`.
+* **RAG\_HOST**: Hostname or IP address for the server. Default is `0.0.0.0`.
+* **COLLECTION\_NAME**: The name of the collection in the vector store. Default is `"testcollection"`.
+* **RAG\_USE\_FULL\_CONTEXT**: Set to `"True"` to fetch the full context of uploaded/referenced files. Default is `false`, which limits retrieval to the top 4 matches.
+* **CHUNK\_SIZE**: Size of text chunks for processing. Default is `1500`.
+* **CHUNK\_OVERLAP**: Number of overlapping characters between chunks. Default is `100`.
+* **EMBEDDINGS\_PROVIDER**: Choose from `"openai"`, `"azure"`, `"huggingface"`, `"huggingfacetei"`, or `"ollama"`. Default is `"openai"`.
+* **EMBEDDINGS\_MODEL**: Specific embedding model to use (varies by provider). Default for OpenAI is `"text-embedding-3-small"`.
+* **OLLAMA\_BASE\_URL**: Required if RAG API runs in Docker. Usually set to `http://host.docker.internal:11434`.
+
+---
+
 
