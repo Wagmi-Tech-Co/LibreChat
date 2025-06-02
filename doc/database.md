@@ -109,9 +109,10 @@ LIMIT 5;
 
 ## RAG API Configuration Environment Variables
 
-* **RAG\_OPENAI\_API\_KEY**: The API key for OpenAI embeddings. Overrides `OPENAI_API_KEY` to prevent conflicts with LibreChat credentials.
-* **RAG\_PORT**: The port number where the RAG API server runs. Default is `8000`.
-* **RAG\_HOST**: Hostname or IP address for the server. Default is `0.0.0.0`.
+* **EMBEDDINGS_PROVIDER** : huggingface  The API key for أuggingface embeddings. Overrides huggingface to prevent conflicts with LibreChat credentials.
+* **HF_TOKEN** : ####
+* **EMBEDDINGS_MODEL** : sentence-transformers/all-MiniLM-L6-v2
+
 * **COLLECTION\_NAME**: The name of the collection in the vector store. Default is `"testcollection"`.
 * **RAG\_USE\_FULL\_CONTEXT**: Set to `"True"` to fetch the full context of uploaded/referenced files. Default is `false`, which limits retrieval to the top 4 matches.
 * **CHUNK\_SIZE**: Size of text chunks for processing. Default is `1500`.
