@@ -28,7 +28,7 @@ const createInvite = async (email) => {
       email,
       token: hash,
       createdAt: Date.now(),
-      expiresIn: 604800,
+      expiresIn: 86400, // 24 hours in seconds
     });
 
     return encodedToken;

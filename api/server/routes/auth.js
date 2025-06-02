@@ -1,4 +1,5 @@
 const express = require('express');
+const emailWhitelistRoutes = require('./emailWhitelist');
 const {
   refreshController,
   registrationController,
@@ -15,12 +16,14 @@ const {
   regenerateBackupCodes,
   confirm2FA,
 } = require('~/server/controllers/TwoFactorController');
+const { setPasswordController } = require('~/server/controllers/SetPasswordController');
 const {
   checkBan,
   logHeaders,
   loginLimiter,
   requireJwtAuth,
   checkInviteUser,
+  checkActivationToken,
   registerLimiter,
   requireLdapAuth,
   setBalanceConfig,
@@ -28,6 +31,7 @@ const {
   resetPasswordLimiter,
   validateRegistration,
   validatePasswordReset,
+  inviteLimiter,
 } = require('~/server/middleware');
 
 const router = express.Router();
@@ -62,11 +66,23 @@ router.post(
 );
 router.post('/resetPassword', checkBan, validatePasswordReset, resetPasswordController);
 
+// Private Beta - Set Password Route
+router.post(
+  '/set-password',
+  inviteLimiter,
+  checkBan,
+  checkActivationToken,
+  setPasswordController,
+);
+
 router.get('/2fa/enable', requireJwtAuth, enable2FA);
 router.post('/2fa/verify', requireJwtAuth, verify2FA);
 router.post('/2fa/verify-temp', checkBan, verify2FAWithTempToken);
 router.post('/2fa/confirm', requireJwtAuth, confirm2FA);
 router.post('/2fa/disable', requireJwtAuth, disable2FA);
 router.post('/2fa/backup/regenerate', requireJwtAuth, regenerateBackupCodes);
+
+// Email whitelist routes
+router.use('/', emailWhitelistRoutes);
 
 module.exports = router;

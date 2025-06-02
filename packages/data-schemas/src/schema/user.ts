@@ -10,6 +10,7 @@ export interface IUser extends Document {
   avatar?: string;
   provider: string;
   role?: string;
+  status?: 'pending' | 'active' | 'suspended';
   googleId?: string;
   facebookId?: string;
   openidId?: string;
@@ -96,6 +97,11 @@ const User = new Schema<IUser>(
     role: {
       type: String,
       default: SystemRoles.USER,
+    },
+    status: {
+      type: String,
+      enum: ['pending', 'active', 'suspended'],
+      default: 'active',
     },
     googleId: {
       type: String,

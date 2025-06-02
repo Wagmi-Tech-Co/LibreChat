@@ -5,6 +5,8 @@ import {
   CreatePromptForm,
   EmptyPromptPreview,
 } from '~/components/Prompts';
+import EmailWhitelistDashboard from '~/components/Admin/EmailWhitelistDashboard';
+import AdminView from '~/components/Admin/AdminView';
 import DashboardRoute from './Layouts/Dashboard';
 
 const dashboardRoutes = {
@@ -73,8 +75,18 @@ const dashboardRoutes = {
       ],
     },
     {
+      path: 'admin/*',
+      element: <AdminView />,
+      children: [
+        {
+          path: 'email-whitelist',
+          element: <EmailWhitelistDashboard />,
+        },
+      ],
+    },
+    {
       path: '*',
-      element: <Navigate to="/d/files" replace={true} />,
+      element: <Navigate to="/d/prompts" replace={true} />,
     },
   ],
 };

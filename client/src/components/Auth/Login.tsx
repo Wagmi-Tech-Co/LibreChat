@@ -8,6 +8,7 @@ import { useLocalize } from '~/hooks';
 import LoginForm from './LoginForm';
 import SocialButton from '~/components/Auth/SocialButton';
 import { OpenIDIcon } from '~/components';
+import EmailWhitelistRequest from './EmailWhitelistRequest';
 
 function Login() {
   const localize = useLocalize();
@@ -20,6 +21,7 @@ function Login() {
 
   // Persist the disable flag locally so that once detected, auto-redirect stays disabled.
   const [isAutoRedirectDisabled, setIsAutoRedirectDisabled] = useState(disableAutoRedirect);
+  const [showWhitelistRequest, setShowWhitelistRequest] = useState(false);
 
   // Once the disable flag is detected, update local state and remove the parameter from the URL.
   useEffect(() => {
@@ -84,7 +86,7 @@ function Login() {
           setError={setError}
         />
       )}
-      {startupConfig?.registrationEnabled === true && (
+      {startupConfig?.registrationEnabled === true && !startupConfig?.privateBetaMode && (
         <p className="my-4 text-center text-sm font-light text-gray-700 dark:text-white">
           {' '}
           {localize('com_auth_no_account')}{' '}
@@ -95,6 +97,27 @@ function Login() {
             {localize('com_auth_sign_up')}
           </a>
         </p>
+      )}
+      {startupConfig?.privateBetaMode && (
+        <div className="my-4 text-center">
+          <p className="text-sm font-light text-gray-700 dark:text-white mb-2">
+            {localize('com_auth_registration_invitation_only')}
+          </p>
+          <button
+            onClick={() => setShowWhitelistRequest(!showWhitelistRequest)}
+            className="text-sm font-medium text-green-600 transition-colors hover:text-green-700 dark:text-green-400 dark:hover:text-green-300"
+          >
+            {showWhitelistRequest 
+              ? localize('com_auth_email_whitelist_hide_form')
+              : localize('com_auth_email_whitelist_request_access')}
+          </button>
+        </div>
+      )}
+      
+      {showWhitelistRequest && (
+        <div className="mt-4">
+          <EmailWhitelistRequest onClose={() => setShowWhitelistRequest(false)} />
+        </div>
       )}
     </>
   );

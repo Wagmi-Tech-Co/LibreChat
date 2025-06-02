@@ -1,5 +1,6 @@
 import type { AxiosResponse } from 'axios';
 import type * as t from './types';
+import type * as auth from './types/auth';
 import * as endpoints from './api-endpoints';
 import * as a from './types/assistants';
 import * as m from './types/mutations';
@@ -61,12 +62,31 @@ export function deleteSharedLink(shareId: string): Promise<m.TDeleteSharedLinkRe
 }
 
 export function updateUserKey(payload: t.TUpdateUserKeyRequest) {
-  const { value } = payload;
-  if (!value) {
-    throw new Error('value is required');
-  }
+  return request.post(endpoints.keys(), payload);
+}
 
-  return request.put(endpoints.keys(), payload);
+// Email whitelist functions
+export function requestEmailWhitelist(payload: auth.TRequestEmailWhitelistRequest): Promise<auth.TRequestEmailWhitelistResponse> {
+  return request.post(endpoints.requestEmailWhitelist(), payload);
+}
+
+export function getEmailWhitelistRequests(
+  status?: string,
+  page?: number,
+  limit?: number
+): Promise<auth.TEmailWhitelistRequestsResponse> {
+  return request.get(endpoints.getEmailWhitelistRequests(status, page, limit));
+}
+
+export function reviewEmailWhitelistRequest(
+  requestId: string,
+  payload: auth.TReviewEmailWhitelistRequest
+): Promise<auth.TReviewEmailWhitelistResponse> {
+  return request.put(endpoints.reviewEmailWhitelistRequest(requestId), payload);
+}
+
+export function deleteEmailWhitelistRequest(requestId: string): Promise<{ success: boolean; message: string }> {
+  return request.delete(endpoints.deleteEmailWhitelistRequest(requestId));
 }
 
 export function getPresets(): Promise<s.TPreset[]> {
@@ -138,6 +158,10 @@ export const resendVerificationEmail = (
   payload: t.TResendVerificationEmail,
 ): Promise<t.VerifyEmailResponse> => {
   return request.post(endpoints.resendVerificationEmail(), payload);
+};
+
+export const setPassword = (payload: t.TSetPasswordRequest): Promise<t.TSetPasswordResponse> => {
+  return request.post(endpoints.setPassword(), payload);
 };
 
 export const getAvailablePlugins = (): Promise<s.TPlugin[]> => {

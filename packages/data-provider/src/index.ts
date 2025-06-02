@@ -21,6 +21,7 @@ export * from './roles';
 export * from './types';
 export * from './types/agents';
 export * from './types/assistants';
+export * from './types/auth';
 export * from './types/files';
 export * from './types/mutations';
 export * from './types/queries';

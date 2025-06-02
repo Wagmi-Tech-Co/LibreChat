@@ -95,8 +95,17 @@ const Registration: React.FC = () => {
     </div>
   );
 
+  // Check if user is accessing registration in private beta mode
+  const isPrivateBetaMode = startupConfig?.privateBetaMode;
+  const hasInviteToken = !!token;
+
   return (
     <>
+      {isPrivateBetaMode && !hasInviteToken && (
+        <div className="mb-4 rounded-md border border-orange-500 bg-orange-500/10 px-3 py-2 text-sm text-gray-600 dark:text-gray-200">
+          {localize('com_auth_registration_invitation_required')}
+        </div>
+      )}
       {errorMessage && (
         <ErrorMessage>
           {localize('com_auth_error_create')} {errorMessage}
@@ -198,7 +207,8 @@ const Registration: React.FC = () => {
                 disabled={
                   Object.keys(errors).length > 0 ||
                   isSubmitting ||
-                  (requireCaptcha && !turnstileToken)
+                  (requireCaptcha && !turnstileToken) ||
+                  (isPrivateBetaMode && !hasInviteToken)
                 }
                 type="submit"
                 aria-label="Submit registration"

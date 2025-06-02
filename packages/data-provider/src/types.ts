@@ -398,6 +398,19 @@ export type TRequestPasswordResetResponse = {
   message?: string;
 };
 
+export type TSetPasswordRequest = {
+  token: string;
+  email: string;
+  password: string;
+  name?: string;
+};
+
+export type TSetPasswordResponse = {
+  message: string;
+  token?: string;
+  user?: TUser;
+};
+
 /**
  * Represents the response from the import endpoint.
  */

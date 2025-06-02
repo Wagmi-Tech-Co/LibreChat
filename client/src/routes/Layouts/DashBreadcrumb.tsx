@@ -2,7 +2,7 @@ import { useMemo, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import { SystemRoles } from 'librechat-data-provider';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { ArrowLeft, MessageSquareQuote } from 'lucide-react';
+import { ArrowLeft, MessageSquareQuote, Shield } from 'lucide-react';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -19,11 +19,13 @@ import { useLocalize, useCustomLink, useAuthContext } from '~/hooks';
 import AdvancedSwitch from '~/components/Prompts/AdvancedSwitch';
 // import { RightPanel } from '../../components/Prompts/RightPanel';
 import AdminSettings from '~/components/Prompts/AdminSettings';
+import AdminNavigationButton from '~/components/Admin/AdminNavigationButton';
 import { useDashboardContext } from '~/Providers';
 // import { PromptsEditorMode } from '~/common';
 import store from '~/store';
 
 const promptsPathPattern = /prompts\/(?!new(?:\/|$)).*$/;
+const adminPathPattern = /admin\//;
 
 const getConversationId = (prevLocationPath: string) => {
   if (!prevLocationPath || prevLocationPath.includes('/d/')) {
@@ -51,9 +53,15 @@ export default function DashBreadcrumb() {
 
   const chatLinkHandler = useCustomLink('/c/' + lastConversationId, clickCallback);
   const promptsLinkHandler = useCustomLink('/d/prompts');
+  const adminLinkHandler = useCustomLink('/d/admin/email-whitelist');
 
   const isPromptsPath = useMemo(
     () => promptsPathPattern.test(location.pathname),
+    [location.pathname],
+  );
+
+  const isAdminPath = useMemo(
+    () => adminPathPattern.test(location.pathname),
     [location.pathname],
   );
 
@@ -102,10 +110,26 @@ export default function DashBreadcrumb() {
               {localize('com_ui_prompts')}
             </BreadcrumbLink>
           </BreadcrumbItem>
+          {isAdminPath && user?.role === SystemRoles.ADMIN && (
+            <>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem className="hover:dark:text-white">
+                <BreadcrumbLink
+                  href="/d/admin/email-whitelist"
+                  className="flex flex-row items-center gap-1"
+                  onClick={adminLinkHandler}
+                >
+                  <Shield className="h-4 w-4 dark:text-gray-300" aria-hidden="true" />
+                  {localize('com_admin_email_whitelist_dashboard')}
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+            </>
+          )}
         </BreadcrumbList>
       </Breadcrumb>
       <div className="flex items-center justify-center gap-2">
         {isPromptsPath && <AdvancedSwitch />}
+        {!isAdminPath && <AdminNavigationButton />}
         {user?.role === SystemRoles.ADMIN && <AdminSettings />}
       </div>
     </div>

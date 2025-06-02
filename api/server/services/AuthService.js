@@ -20,7 +20,7 @@ const {
   generateRefreshToken,
 } = require('~/models');
 const { isEnabled, checkEmailConfig, sendEmail } = require('~/server/utils');
-const { isEmailDomainAllowed } = require('~/server/services/domains');
+const { isEmailWhitelisted } = require('~/server/services/emailWhitelist');
 const { registerSchema } = require('~/strategies/validators');
 const { logger } = require('~/config');
 
@@ -192,10 +192,10 @@ const registerUser = async (user, additionalData = {}) => {
       return { status: 200, message: genericVerificationMessage };
     }
 
-    if (!(await isEmailDomainAllowed(email))) {
+    if (!(await isEmailWhitelisted(email))) {
       const errorMessage =
-        'The email address provided cannot be used. Please use a different email address.';
-      logger.error(`[registerUser] [Registration not allowed] [Email: ${user.email}]`);
+        'Your email address is not approved for registration. Please request whitelist approval first.';
+      logger.error(`[registerUser] [Email not whitelisted] [Email: ${user.email}]`);
       return { status: 403, message: errorMessage };
     }
 

@@ -174,3 +174,23 @@ export const useVerifyTwoFactorTempMutation = (
     },
   );
 };
+
+export const useSetPasswordMutation = (
+  options?: t.MutationOptions<t.TSetPasswordResponse, t.TSetPasswordRequest, unknown, unknown>,
+): UseMutationResult<t.TSetPasswordResponse, unknown, t.TSetPasswordRequest, unknown> => {
+  const queryClient = useQueryClient();
+  const setQueriesEnabled = useSetRecoilState<boolean>(store.queriesEnabled);
+  
+  return useMutation([MutationKeys.setPassword], {
+    mutationFn: (payload: t.TSetPasswordRequest) => dataService.setPassword(payload),
+    ...(options || {}),
+    onSuccess: (data, ...args) => {
+      // Set user data and enable queries on successful password set
+      if (data.user) {
+        queryClient.setQueryData([QueryKeys.user], data.user);
+      }
+      setQueriesEnabled(true);
+      options?.onSuccess?.(data, ...args);
+    },
+  });
+};
