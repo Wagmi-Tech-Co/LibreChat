@@ -215,11 +215,11 @@ async function sendInvitationEmail(email) {
     const inviteToken = await createInvite(email);
     
     // Construct invitation link
-    const baseUrl = process.env.DOMAIN || process.env.HOST || 'http://localhost:3080';
+    const baseUrl = process.env.DOMAIN || process.env.HOST || 'https://chat.wagmi.tech';
     const inviteLink = `${baseUrl}/register?token=${inviteToken}`;
     
     // Prepare email data
-    const appName = process.env.APP_TITLE || 'LibreChat';
+    const appName = process.env.APP_TITLE || 'WagmiChat';
     const emailData = {
       email: email,
       subject: `You're invited to join ${appName}`,
