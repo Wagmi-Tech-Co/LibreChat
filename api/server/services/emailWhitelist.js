@@ -216,7 +216,7 @@ async function sendInvitationEmail(email) {
     
     // Construct invitation link
     // const baseUrl = process.env.DOMAIN || process.env.HOST || 'https://chat.wagmi.tech';
-    const baseUrl ='https://wagmichat.com';
+    const baseUrl ='https://chat.wagmi.tech';
     const inviteLink = `${baseUrl}/register?token=${inviteToken}`;
     
     // Prepare email data
