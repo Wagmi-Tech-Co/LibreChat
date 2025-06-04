@@ -1172,21 +1172,18 @@ EMAIL_FROM_NAME="Your App Name"
    nano .env
    ```
 
-5. **Start Backend Server**:
-   ```bash
-   npm run backend
-   ```
+
 
 ### Frontend Deployment
 
 1. **Build Frontend**:
    ```bash
-   npm run frontend:build
+   npm run frontend
    ```
 
 2. **Start Frontend Development Server** (for development):
    ```bash
-   npm run frontend
+   npm run frontend:dev
    ```
 
 3. **Production Deployment**:
@@ -1198,25 +1195,11 @@ EMAIL_FROM_NAME="Your App Name"
    # Static files will be in client/dist/
    ```
 
-### Docker Deployment
-
-1. **Build Docker Image**:
+4. **Start Backend Server**:
    ```bash
-   docker-compose build
+   npm run backend
    ```
 
-2. **Start Services**:
-   ```bash
-   docker-compose up -d
-   ```
-
-3. **Environment Variables**:
-   Ensure your `docker-compose.yml` includes the new environment variables:
-   ```yaml
-   environment:
-     - PRIVATE_BETA_MODE=true
-     - ALLOW_REGISTRATION=false
-   ```
 
 ### Production Checklist
 
@@ -1287,6 +1270,9 @@ EMAIL_FROM_NAME="Your App Name"
    cd packages/data-provider
    npm run clean
    npm run build
+   cd ../..
+   npm run frontend 
+   npm run backend
    ```
 
 2. **TypeScript compilation errors**:
@@ -1350,27 +1336,7 @@ EMAIL_FROM_NAME="Your App Name"
 
 ## Future Enhancements
 
-### Planned Features
 
-1. **Email Notifications**:
-   - Send confirmation emails when requests are submitted
-   - Notify users when requests are approved/rejected
-   - Admin notifications for new requests
-
-2. **Admin Dashboard**:
-   - Complete web interface for managing whitelist requests
-   - Bulk operations (approve/reject multiple requests)
-   - Request analytics and reporting
-
-3. **Advanced Filtering**:
-   - Domain-based auto-approval rules
-   - Organization-based grouping
-   - Custom approval workflows
-
-4. **Integration Enhancements**:
-   - LDAP/Active Directory integration
-   - SSO provider email verification
-   - API keys for programmatic access
 
 ### Migration Notes
 
