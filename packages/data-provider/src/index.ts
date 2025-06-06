@@ -28,6 +28,8 @@ export * from './types/queries';
 export * from './types/runs';
 /* query/mutation keys */
 export * from './keys';
+/* react-query hooks and functions */
+export * from './react-query';
 /* api call helpers */
 export * from './headers-helpers';
 export { default as request } from './request';

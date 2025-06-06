@@ -1,8 +1,9 @@
 import { useForm } from 'react-hook-form';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Turnstile } from '@marsidev/react-turnstile';
 import { useNavigate, useOutletContext, useLocation } from 'react-router-dom';
 import { useRegisterUserMutation } from 'librechat-data-provider/react-query';
+import { dataService } from 'librechat-data-provider';
 import type { TRegisterUser, TError } from 'librechat-data-provider';
 import type { TLoginLayoutContext } from '~/common';
 import { ErrorMessage } from './ErrorMessage';
@@ -19,6 +20,7 @@ const Registration: React.FC = () => {
     watch,
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<TRegisterUser>({ mode: 'onChange' });
   const password = watch('password');
@@ -27,6 +29,8 @@ const Registration: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [countdown, setCountdown] = useState<number>(3);
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const [prefilledEmail, setPrefilledEmail] = useState<string>('');
+  const [isEmailFromInvite, setIsEmailFromInvite] = useState<boolean>(false);
 
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -35,6 +39,27 @@ const Registration: React.FC = () => {
 
   // only require captcha if we have a siteKey
   const requireCaptcha = Boolean(startupConfig?.turnstile?.siteKey);
+
+  // Fetch email from invitation token when present
+  useEffect(() => {
+    const fetchEmailFromToken = async () => {
+      if (token && !prefilledEmail) {
+        try {
+          const response = await dataService.validateInviteToken(token);
+          if (response?.email) {
+            setPrefilledEmail(response.email);
+            setIsEmailFromInvite(true);
+            setValue('email', response.email);
+          }
+        } catch (error) {
+          console.error('Error validating invitation token:', error);
+          // Don't show error to user - just continue with normal registration
+        }
+      }
+    };
+
+    fetchEmailFromToken();
+  }, [token, prefilledEmail, setValue]);
 
   const registerUser = useRegisterUserMutation({
     onMutate: () => {
@@ -63,37 +88,50 @@ const Registration: React.FC = () => {
     },
   });
 
-  const renderInput = (id: string, label: TranslationKeys, type: string, validation: object) => (
-    <div className="mb-4">
-      <div className="relative">
-        <input
-          id={id}
-          type={type}
-          autoComplete={id}
-          aria-label={localize(label)}
-          {...register(
-            id as 'name' | 'email' | 'username' | 'password' | 'confirm_password',
-            validation,
-          )}
-          aria-invalid={!!errors[id]}
-          className="webkit-dark-styles transition-color peer w-full rounded-2xl border border-border-light bg-surface-primary px-3.5 pb-2.5 pt-3 text-text-primary duration-200 focus:border-green-500 focus:outline-none"
-          placeholder=" "
-          data-testid={id}
-        />
-        <label
-          htmlFor={id}
-          className="absolute start-3 top-1.5 z-10 origin-[0] -translate-y-4 scale-75 transform bg-surface-primary px-2 text-sm text-text-secondary-alt duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-1.5 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-green-500 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4"
-        >
-          {localize(label)}
-        </label>
+  const renderInput = (id: string, label: TranslationKeys, type: string, validation: object) => {
+    const isEmailField = id === 'email';
+    const isDisabled = isEmailField && isEmailFromInvite;
+    
+    return (
+      <div className="mb-4">
+        <div className="relative">
+          <input
+            id={id}
+            type={type}
+            autoComplete={id}
+            aria-label={localize(label)}
+            disabled={isDisabled}
+            {...register(
+              id as 'name' | 'email' | 'username' | 'password' | 'confirm_password',
+              validation,
+            )}
+            aria-invalid={!!errors[id]}
+            className={`webkit-dark-styles transition-color peer w-full rounded-2xl border border-border-light bg-surface-primary px-3.5 pb-2.5 pt-3 text-text-primary duration-200 focus:border-green-500 focus:outline-none ${
+              isDisabled ? 'opacity-50 cursor-not-allowed bg-gray-100 dark:bg-gray-800' : ''
+            }`}
+            placeholder=" "
+            data-testid={id}
+          />
+          <label
+            htmlFor={id}
+            className="absolute start-3 top-1.5 z-10 origin-[0] -translate-y-4 scale-75 transform bg-surface-primary px-2 text-sm text-text-secondary-alt duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-1.5 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-green-500 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4"
+          >
+            {localize(label)}
+          </label>
+        </div>
+        {errors[id] && (
+          <span role="alert" className="mt-1 text-sm text-red-500">
+            {String(errors[id]?.message) ?? ''}
+          </span>
+        )}
+        {isEmailField && isEmailFromInvite && (
+          <span className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+            {localize('com_auth_email_from_invitation')}
+          </span>
+        )}
       </div>
-      {errors[id] && (
-        <span role="alert" className="mt-1 text-sm text-red-500">
-          {String(errors[id]?.message) ?? ''}
-        </span>
-      )}
-    </div>
-  );
+    );
+  };
 
   // Check if user is accessing registration in private beta mode
   const isPrivateBetaMode = startupConfig?.privateBetaMode;
@@ -146,7 +184,7 @@ const Registration: React.FC = () => {
                 message: localize('com_auth_name_max_length'),
               },
             })}
-            {renderInput('username', 'com_auth_username', 'text', {
+            {/* {renderInput('username', 'com_auth_username', 'text', {
               minLength: {
                 value: 2,
                 message: localize('com_auth_username_min_length'),
@@ -155,7 +193,7 @@ const Registration: React.FC = () => {
                 value: 80,
                 message: localize('com_auth_username_max_length'),
               },
-            })}
+            })} */}
             {renderInput('email', 'com_auth_email', 'email', {
               required: localize('com_auth_email_required'),
               minLength: {

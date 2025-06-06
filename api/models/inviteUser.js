@@ -63,7 +63,32 @@ const getInvite = async (encodedToken, email) => {
   }
 };
 
+/**
+ * @function getInviteByToken
+ * @description This function retrieves a user invite by token only (for email prefill)
+ * @param {string} encodedToken - The token of the invite to retrieve
+ * @returns {Promise<Object>} A promise that resolves to the retrieved invite document with email
+ * @throws {Error} If there is an error retrieving the invite or if the invite does not exist
+ */
+const getInviteByToken = async (encodedToken) => {
+  try {
+    const token = decodeURIComponent(encodedToken);
+    const hash = await hashToken(token);
+    const invite = await findToken({ token: hash });
+
+    if (!invite) {
+      throw new Error('Invite not found or expired');
+    }
+
+    return { email: invite.email };
+  } catch (error) {
+    logger.error('[getInviteByToken] Error getting invite by token:', error);
+    return { error: true, message: error.message };
+  }
+};
+
 module.exports = {
   createInvite,
   getInvite,
+  getInviteByToken,
 };

@@ -140,6 +140,7 @@ export const getEmailWhitelistRequests = (status?: string, page?: number, limit?
 };
 export const reviewEmailWhitelistRequest = (requestId: string) => `/api/auth/whitelist-requests/${requestId}`;
 export const deleteEmailWhitelistRequest = (requestId: string) => `/api/auth/whitelist-requests/${requestId}`;
+export const validateInviteToken = (token: string) => `/api/auth/invite/validate/${encodeURIComponent(token)}`;
 
 export const verifyEmail = () => '/api/user/verify';
 

@@ -85,4 +85,27 @@ router.post('/2fa/backup/regenerate', requireJwtAuth, regenerateBackupCodes);
 // Email whitelist routes
 router.use('/', emailWhitelistRoutes);
 
+// Invitation token validation route
+router.get('/invite/validate/:token', async (req, res) => {
+  try {
+    const { token } = req.params;
+
+    if (!token) {
+      return res.status(400).json({ error: 'Token is required' });
+    }
+
+    const { getInviteByToken } = require('~/models/inviteUser');
+    const invite = await getInviteByToken(token);
+
+    if (invite.error) {
+      return res.status(404).json({ error: invite.message });
+    }
+
+    return res.json({ email: invite.email });
+  } catch (error) {
+    console.error('Error validating invitation token:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 module.exports = router;

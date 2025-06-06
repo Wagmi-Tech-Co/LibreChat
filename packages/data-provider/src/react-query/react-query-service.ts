@@ -347,3 +347,7 @@ export const useGetCustomConfigSpeechQuery = (
     },
   );
 };
+
+export const validateInviteToken = (token: string): Promise<{ email: string }> => {
+  return dataService.validateInviteToken(token);
+};

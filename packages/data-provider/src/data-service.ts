@@ -164,6 +164,10 @@ export const setPassword = (payload: t.TSetPasswordRequest): Promise<t.TSetPassw
   return request.post(endpoints.setPassword(), payload);
 };
 
+export const validateInviteToken = (token: string): Promise<{ email: string }> => {
+  return request.get(endpoints.validateInviteToken(token));
+};
+
 export const getAvailablePlugins = (): Promise<s.TPlugin[]> => {
   return request.get(endpoints.plugins());
 };
