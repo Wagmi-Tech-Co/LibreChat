@@ -35,12 +35,12 @@ const EmailWhitelistRequest: React.FC<EmailWhitelistRequestProps> = ({
           setShowSuccess(true);
           reset();
           // Auto close after 3 seconds
-          setTimeout(() => {
-            setShowSuccess(false);
-            if (onClose) {
-              onClose();
-            }
-          }, 3000);
+          // setTimeout(() => {
+          //   setShowSuccess(false);
+          //   if (onClose) {
+          //     onClose();
+          //   }
+          // }, 3000);
         } else {
           setErrorMessage(response.message);
         }
