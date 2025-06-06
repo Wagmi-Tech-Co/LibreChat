@@ -156,6 +156,7 @@
   "com_admin_email_whitelist_send_invitation": "Send invitation email upon approval",
   "com_admin_email_whitelist_send_invitation_description": "When checked, an invitation email with registration link will be sent to the approved user.",
   "com_admin_email_whitelist_delete_confirm": "Are you sure you want to delete this email whitelist request? This action cannot be undone.",
+  "com_admin_manage_users": "Manage Users",
   "com_auth_sign_up": "Sign up",
   "com_endpoint": "Endpoint",
   "com_endpoint_agent": "Agent",

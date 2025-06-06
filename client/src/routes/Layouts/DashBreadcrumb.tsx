@@ -19,7 +19,7 @@ import { useLocalize, useCustomLink, useAuthContext } from '~/hooks';
 import AdvancedSwitch from '~/components/Prompts/AdvancedSwitch';
 // import { RightPanel } from '../../components/Prompts/RightPanel';
 import AdminSettings from '~/components/Prompts/AdminSettings';
-import AdminNavigationButton from '~/components/Admin/AdminNavigationButton';
+// import AdminNavigationButton from '~/components/Admin/AdminNavigationButton';
 import { useDashboardContext } from '~/Providers';
 // import { PromptsEditorMode } from '~/common';
 import store from '~/store';
@@ -113,7 +113,7 @@ export default function DashBreadcrumb() {
           {isAdminPath && user?.role === SystemRoles.ADMIN && (
             <>
               <BreadcrumbSeparator />
-              <BreadcrumbItem className="hover:dark:text-white">
+              {/* <BreadcrumbItem className="hover:dark:text-white">
                 <BreadcrumbLink
                   href="/d/admin/email-whitelist"
                   className="flex flex-row items-center gap-1"
@@ -122,14 +122,14 @@ export default function DashBreadcrumb() {
                   <Shield className="h-4 w-4 dark:text-gray-300" aria-hidden="true" />
                   {localize('com_admin_email_whitelist_dashboard')}
                 </BreadcrumbLink>
-              </BreadcrumbItem>
+              </BreadcrumbItem> */}
             </>
           )}
         </BreadcrumbList>
       </Breadcrumb>
       <div className="flex items-center justify-center gap-2">
         {isPromptsPath && <AdvancedSwitch />}
-        {!isAdminPath && <AdminNavigationButton />}
+        {/* {!isAdminPath && <AdminNavigationButton />} */}
         {user?.role === SystemRoles.ADMIN && <AdminSettings />}
       </div>
     </div>

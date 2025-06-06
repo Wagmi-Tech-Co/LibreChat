@@ -9,6 +9,7 @@ import ExportAndShareMenu from './ExportAndShareMenu';
 import { useMediaQuery, useHasAccess } from '~/hooks';
 import BookmarkMenu from './Menus/BookmarkMenu';
 import { TemporaryChat } from './TemporaryChat';
+import { ManageUsers } from './ManageUsers';
 import AddMultiConvo from './AddMultiConvo';
 
 const defaultInterface = getConfigDefaults().interface;
@@ -49,6 +50,7 @@ export default function Header() {
                 isSharedButtonEnabled={startupConfig?.sharedLinksEnabled ?? false}
               />
               <TemporaryChat />
+              <ManageUsers />
             </>
           )}
         </div>
@@ -58,6 +60,7 @@ export default function Header() {
               isSharedButtonEnabled={startupConfig?.sharedLinksEnabled ?? false}
             />
             <TemporaryChat />
+            <ManageUsers />
           </div>
         )}
       </div>
