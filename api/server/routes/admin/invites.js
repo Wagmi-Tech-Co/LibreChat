@@ -84,7 +84,7 @@ router.post('/invite',
       
       const emailData = {
         to: email,
-        subject: `You're invited to join ${process.env.APP_TITLE || 'LibreChat'}`,
+        subject: `You're invited to join ${process.env.APP_TITLE || 'LibreChat'}!`,
         template: 'inviteUser',
         context: {
           appName: process.env.APP_TITLE || 'LibreChat',

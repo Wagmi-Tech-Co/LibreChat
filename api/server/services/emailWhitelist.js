@@ -223,7 +223,7 @@ async function sendInvitationEmail(email) {
     const appName = process.env.APP_TITLE || 'WagmiChat';
     const emailData = {
       email: email,
-      subject: `You're invited to join ${appName}`,
+      subject: `You're invited to join ${appName}!`,
       payload: {
         appName: appName,
         inviteLink: inviteLink,
