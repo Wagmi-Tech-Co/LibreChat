@@ -124,7 +124,7 @@ const getAvailableTools = async (req, res) => {
     });
 
     const toolDefinitions = req.app.locals.availableTools;
-    const tools = authenticatedPlugins.filter(
+    let tools = authenticatedPlugins.filter(
       (plugin) =>
         toolDefinitions[plugin.pluginKey] !== undefined ||
         (plugin.toolkit === true &&

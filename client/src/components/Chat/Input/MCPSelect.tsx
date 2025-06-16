@@ -1,12 +1,13 @@
 import React, { memo, useRef, useMemo, useEffect, useCallback } from 'react';
 import { useRecoilState } from 'recoil';
-import { Constants, EModelEndpoint, LocalStorageKeys } from 'librechat-data-provider';
+import { Constants, EModelEndpoint, LocalStorageKeys, SystemRoles } from 'librechat-data-provider';
 import { useAvailableToolsQuery } from '~/data-provider';
 import useLocalStorage from '~/hooks/useLocalStorageAlt';
 import MultiSelect from '~/components/ui/MultiSelect';
 import { ephemeralAgentByConvoId } from '~/store';
 import MCPIcon from '~/components/ui/MCPIcon';
-import { useLocalize } from '~/hooks';
+import { useLocalize, useAuthContext } from '~/hooks';
+import { useGetStartupConfig } from '~/data-provider';
 
 const storageCondition = (value: unknown, rawCurrentValue?: string | null) => {
   if (rawCurrentValue) {
@@ -24,8 +25,19 @@ const storageCondition = (value: unknown, rawCurrentValue?: string | null) => {
 
 function MCPSelect({ conversationId }: { conversationId?: string | null }) {
   const localize = useLocalize();
+  const { user } = useAuthContext();
+  const { data: startupConfig } = useGetStartupConfig();
   const key = conversationId ?? Constants.NEW_CONVO;
   const hasSetFetched = useRef<string | null>(null);
+
+  // Check if MCP should be restricted to admins only
+  const mcpJustAdmin = startupConfig?.mcpJustAdmin === true;
+  const isAdmin = user?.role === SystemRoles.ADMIN;
+  
+  // If MCP is restricted to admins only and user is not admin, don't render the component
+  if (mcpJustAdmin && !isAdmin) {
+    return null;
+  }
 
   const { data: mcpServerSet, isFetched } = useAvailableToolsQuery(EModelEndpoint.agents, {
     select: (data) => {

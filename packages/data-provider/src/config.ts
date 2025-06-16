@@ -568,6 +568,7 @@ export type TStartupConfig = {
   instanceProjectId: string;
   bundlerURL?: string;
   staticBundlerURL?: string;
+  mcpJustAdmin: boolean;
 };
 
 export enum OCRStrategy {
