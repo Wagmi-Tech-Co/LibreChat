@@ -227,7 +227,7 @@ const EmailWhitelistDashboard: React.FC<EmailWhitelistDashboardProps> = ({
         </div>
       ) : (
         <>
-          <div className="bg-white shadow overflow-hidden sm:rounded-md">
+          <div className="bg-white shadow overflow-hidden sm:rounded-md max-h-96 overflow-y-auto">
             <ul className="divide-y divide-gray-200">
               {requests.map((request) => (
                 <li key={request._id} className="px-6 py-4">

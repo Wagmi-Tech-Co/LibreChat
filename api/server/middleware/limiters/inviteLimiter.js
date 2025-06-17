@@ -8,8 +8,8 @@ const { logger } = require('~/config');
 
 // Environment variables for invitation rate limiting
 const {
-  INVITE_WINDOW = 10, // 10 minutes
-  INVITE_MAX = 3,     // 3 attempts per window
+  INVITE_WINDOW = 5, // 10 minutes
+  INVITE_MAX = 10,     // 3 attempts per window
   INVITE_VIOLATION_SCORE: score = 5,
 } = process.env;
 
