@@ -128,7 +128,7 @@ function MCPSelect({ conversationId }: { conversationId?: string | null }) {
       className="badge-icon min-w-fit"
       selectIcon={
         <img 
-          src="/assets/Wagmi_Tech_Logo_Avatar.svg" 
+          src="/assets/Wagmi_Tech_Logo_Avatar.png" 
           alt="Wagmi Tech Logo" 
           className="icon-md text-text-primary" 
           style={{ width: '1rem', height: '1rem', objectFit: 'contain' }}
