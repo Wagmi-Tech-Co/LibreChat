@@ -66,26 +66,30 @@ export function updateUserKey(payload: t.TUpdateUserKeyRequest) {
 }
 
 // Email whitelist functions
-export function requestEmailWhitelist(payload: auth.TRequestEmailWhitelistRequest): Promise<auth.TRequestEmailWhitelistResponse> {
+export function requestEmailWhitelist(
+  payload: auth.TRequestEmailWhitelistRequest,
+): Promise<auth.TRequestEmailWhitelistResponse> {
   return request.post(endpoints.requestEmailWhitelist(), payload);
 }
 
 export function getEmailWhitelistRequests(
   status?: string,
   page?: number,
-  limit?: number
+  limit?: number,
 ): Promise<auth.TEmailWhitelistRequestsResponse> {
   return request.get(endpoints.getEmailWhitelistRequests(status, page, limit));
 }
 
 export function reviewEmailWhitelistRequest(
   requestId: string,
-  payload: auth.TReviewEmailWhitelistRequest
+  payload: auth.TReviewEmailWhitelistRequest,
 ): Promise<auth.TReviewEmailWhitelistResponse> {
   return request.put(endpoints.reviewEmailWhitelistRequest(requestId), payload);
 }
 
-export function deleteEmailWhitelistRequest(requestId: string): Promise<{ success: boolean; message: string }> {
+export function deleteEmailWhitelistRequest(
+  requestId: string,
+): Promise<{ success: boolean; message: string }> {
   return request.delete(endpoints.deleteEmailWhitelistRequest(requestId));
 }
 
@@ -809,4 +813,11 @@ export function verifyTwoFactorTemp(
   payload: t.TVerify2FATempRequest,
 ): Promise<t.TVerify2FATempResponse> {
   return request.post(endpoints.verifyTwoFactorTemp(), payload);
+}
+
+export function getAllUsers(): Promise<{
+  success: boolean;
+  data: Array<{ id: string; email: string; name: string }>;
+}> {
+  return request.get(endpoints.users());
 }

@@ -138,9 +138,12 @@ export const getEmailWhitelistRequests = (status?: string, page?: number, limit?
   const query = params.toString();
   return `/api/auth/whitelist-requests${query ? `?${query}` : ''}`;
 };
-export const reviewEmailWhitelistRequest = (requestId: string) => `/api/auth/whitelist-requests/${requestId}`;
-export const deleteEmailWhitelistRequest = (requestId: string) => `/api/auth/whitelist-requests/${requestId}`;
-export const validateInviteToken = (token: string) => `/api/auth/invite/validate/${encodeURIComponent(token)}`;
+export const reviewEmailWhitelistRequest = (requestId: string) =>
+  `/api/auth/whitelist-requests/${requestId}`;
+export const deleteEmailWhitelistRequest = (requestId: string) =>
+  `/api/auth/whitelist-requests/${requestId}`;
+export const validateInviteToken = (token: string) =>
+  `/api/auth/invite/validate/${encodeURIComponent(token)}`;
 
 export const verifyEmail = () => '/api/user/verify';
 
@@ -292,3 +295,5 @@ export const disableTwoFactor = () => '/api/auth/2fa/disable';
 export const regenerateBackupCodes = () => '/api/auth/2fa/backup/regenerate';
 export const verifyTwoFactorTemp = () => '/api/auth/2fa/verify-temp';
 export const setPassword = () => '/api/auth/set-password';
+
+export const users = () => '/api/admin/users';

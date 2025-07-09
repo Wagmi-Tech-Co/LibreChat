@@ -222,6 +222,7 @@ export type Agent = {
   hide_sequential_outputs?: boolean;
   artifacts?: ArtifactModes;
   recursion_limit?: number;
+  sharedWithUsers?: string[];
 };
 
 export type TAgentsMap = Record<string, Agent | undefined>;
@@ -255,6 +256,8 @@ export type AgentUpdateParams = {
   projectIds?: string[];
   removeProjectIds?: string[];
   isCollaborative?: boolean;
+  sharedWithUsers?: string[];
+  removeSharedUsers?: string[];
 } & Pick<
   Agent,
   'agent_ids' | 'end_after_tools' | 'hide_sequential_outputs' | 'artifacts' | 'recursion_limit'
