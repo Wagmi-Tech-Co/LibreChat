@@ -70,6 +70,7 @@ export default function AgentFooter({
               agentName={agent?.name ?? ''}
               projectIds={agent?.projectIds ?? []}
               isCollaborative={agent?.isCollaborative}
+              sharedWithUsers={agent?.sharedWithUsers ?? []}
             />
           )}
         {agent && agent.author === user?.id && <DuplicateAgent agent_id={agent_id} />}
