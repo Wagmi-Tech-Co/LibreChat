@@ -82,10 +82,10 @@ export default function ShareAgent({
   const selectedUsers = watch('selectedUsers');
 
   useEffect(() => {
-    if (!sharedGlobalValue) {
+    if (!sharedGlobalValue && selectedUsers.length === 0) {
       setValue(Permissions.UPDATE, false);
     }
-  }, [sharedGlobalValue, setValue]);
+  }, [sharedGlobalValue, selectedUsers.length, setValue]);
 
   useEffect(() => {
     setValue(Permissions.SHARED_GLOBAL, agentIsGlobal);
@@ -129,15 +129,16 @@ export default function ShareAgent({
     }
   };
 
-  const handleSelectAll = () => {
-    setValue(
-      'selectedUsers',
-      allUsers.map((user) => user.id),
-    );
-  };
-
-  const handleDeselectAll = () => {
-    setValue('selectedUsers', []);
+  const handleSelectAllToggle = () => {
+    const areAllUsersSelected = allUsers.length > 0 && selectedUsers.length === allUsers.length;
+    if (areAllUsersSelected) {
+      setValue('selectedUsers', []);
+    } else {
+      setValue(
+        'selectedUsers',
+        allUsers.map((user) => user.id),
+      );
+    }
   };
 
   const onSubmit = (data: FormValues) => {
@@ -277,7 +278,7 @@ export default function ShareAgent({
                 type="button"
                 className="mr-2 cursor-pointer"
                 disabled={
-                  isFetching || updateAgent.isLoading || !instanceProjectId || !sharedGlobalValue
+                  isFetching || updateAgent.isLoading || !instanceProjectId || (!sharedGlobalValue && selectedUsers.length === 0)
                 }
                 onClick={() =>
                   setValue(Permissions.UPDATE, !getValues(Permissions.UPDATE), {
@@ -297,12 +298,17 @@ export default function ShareAgent({
               >
                 {localize('com_agents_allow_editing')}
               </button>
+              {!sharedGlobalValue && selectedUsers.length > 0 && (
+                <span className="ml-2 text-xs text-gray-500">
+                  {localize('com_ui_editing_for_selected_users')}
+                </span>
+              )}
             </div>
             <Controller
               name={Permissions.UPDATE}
               control={control}
               disabled={
-                isFetching || updateAgent.isLoading || !instanceProjectId || !sharedGlobalValue
+                isFetching || updateAgent.isLoading || !instanceProjectId || (!sharedGlobalValue && selectedUsers.length === 0)
               }
               render={({ field }) => (
                 <Switch
@@ -322,7 +328,7 @@ export default function ShareAgent({
                 {localize('com_ui_share_to_individual_users')}
               </h3>
               <div className="text-xs text-gray-500">
-                {selectedUsers.length} {localize('com_ui_selected')}
+                {localize('com_ui_x_selected', { 0: selectedUsers.length })}
               </div>
             </div>
 
@@ -338,25 +344,18 @@ export default function ShareAgent({
               />
             </div>
 
-            {/* Select All/Deselect All Buttons */}
+            {/* Select All Toggle Button */}
             <div className="mb-3 flex gap-2">
               <Button
                 type="button"
                 variant="outline"
                 size="sm"
-                onClick={handleSelectAll}
+                onClick={handleSelectAllToggle}
                 disabled={isLoadingUsers || allUsers.length === 0}
               >
-                {localize('com_ui_select_all')}
-              </Button>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={handleDeselectAll}
-                disabled={isLoadingUsers || selectedUsers.length === 0}
-              >
-                {localize('com_ui_deselect_all')}
+                {allUsers.length > 0 && selectedUsers.length === allUsers.length
+                  ? localize('com_ui_deselect_all')
+                  : localize('com_ui_select_all')}
               </Button>
             </div>
 

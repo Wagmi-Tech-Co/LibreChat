@@ -8,6 +8,7 @@ import ToolCallInfo from './ToolCallInfo';
 import ProgressText from './ProgressText';
 import { Button } from '~/components';
 import { logger, cn } from '~/utils';
+import { useMCPLoadingContext } from '~/Providers/MCPLoadingProvider';
 
 export default function ToolCall({
   initialProgress = 0.1,
@@ -33,6 +34,7 @@ export default function ToolCall({
   const [contentHeight, setContentHeight] = useState<number | undefined>(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const prevShowInfoRef = useRef<boolean>(showInfo);
+  const { startLoading, stopLoading } = useMCPLoadingContext();
 
   const { function_name, domain, isMCPToolCall } = useMemo(() => {
     if (typeof name !== 'string') {
@@ -94,6 +96,19 @@ export default function ToolCall({
 
   const progress = useProgress(initialProgress);
   const cancelled = (!isSubmitting && progress < 1) || error === true;
+
+  // Handle MCP loading state
+  useEffect(() => {
+    if (isMCPToolCall && name) {
+      if (isSubmitting && progress < 1) {
+        // Start loading for MCP tool call
+        startLoading(name, domain || '', function_name);
+      } else if (!isSubmitting || progress >= 1) {
+        // Stop loading when complete or cancelled
+        stopLoading(name, error, error ? 'Tool call failed' : undefined);
+      }
+    }
+  }, [isMCPToolCall, name, isSubmitting, progress, error, startLoading, stopLoading, domain, function_name]);
 
   const getFinishedText = () => {
     if (cancelled) {

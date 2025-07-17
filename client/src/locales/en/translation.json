@@ -915,6 +915,15 @@
   "com_ui_x_selected": "{{0}} selected",
   "com_ui_yes": "Yes",
   "com_ui_zoom": "Zoom",
+  "com_ui_deselect_all": "Deselect all",
+  "com_ui_select_all": "Select all",
+  "com_ui_editing_for_selected_users": "Editing for selected users",
+  "com_ui_share_to_individual_users": "Share to individual users",
+  "com_ui_search_users": "Search users",
+  "com_ui_loading_users": "Loading users...",
+  "com_ui_no_users_found": "No users found",
+  "com_ui_no_users_available": "No users available",
+  "com_ui_saving": "Saving...",
   "com_user_message": "You",
   "com_warning_resubmit_unsupported": "Resubmitting the AI message is not supported for this endpoint."
 }

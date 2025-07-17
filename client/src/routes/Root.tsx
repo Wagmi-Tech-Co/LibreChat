@@ -14,6 +14,7 @@ import {
   FileMapContext,
   SetConvoProvider,
 } from '~/Providers';
+import { MCPLoadingProvider } from '~/Providers/MCPLoadingProvider';
 import TermsAndConditionsModal from '~/components/ui/TermsAndConditionsModal';
 import { useUserTermsQuery, useGetStartupConfig } from '~/data-provider';
 import { Nav, MobileNav } from '~/components/Nav';
@@ -63,56 +64,57 @@ export default function Root() {
       <FileMapContext.Provider value={fileMap}>
         <AssistantsMapContext.Provider value={assistantsMap}>
           <AgentsMapContext.Provider value={agentsMap}>
-            <Banner onHeightChange={setBannerHeight} />
-            <div 
-              className="flex"
-              style={{ height: `calc(100dvh - ${bannerHeight}px)` }}
-            >
-              <div className="relative z-0 flex h-full w-full overflow-hidden">
-                {/* Video Background with Filter */}
-                <div className="absolute inset-0 z-0 overflow-hidden">
-                  <video
-                    className="h-full w-full object-cover opacity-25"
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                  >
-                    <source src="/assets/Arka-Plan.mp4" type="video/mp4" />
-                    Your browser does not support the video tag.
-                  </video>
-                  
-                  {/* Dotted pattern overlay */}
-                  <div 
-                    className="absolute inset-0"
-                    style={{
-                        backgroundImage: 'url(/assets/background_filter.png)',
-                        backgroundSize: "auto",
-                        backgroundRepeat: "repeat",
-                        backgroundPosition: 'center center',
-                
-                    }} 
-                  />
-                </div>
+            <MCPLoadingProvider>
+              <Banner onHeightChange={setBannerHeight} />
+              <div 
+                className="flex"
+                style={{ height: `calc(100dvh - ${bannerHeight}px)` }}
+              >
+                <div className="relative z-0 flex h-full w-full overflow-hidden">
+                  {/* Video Background with Filter */}
+                  <div className="absolute inset-0 z-0 overflow-hidden">
+                    <video
+                      className="h-full w-full object-cover opacity-25"
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                    >
+                      <source src="/assets/Arka-Plan.mp4" type="video/mp4" />
+                      Your browser does not support the video tag.
+                    </video>
+                    
+                    {/* Dotted pattern overlay */}
+                    <div 
+                      className="absolute inset-0"
+                      style={{
+                          backgroundImage: 'url(/assets/background_filter.png)',
+                          backgroundSize: "auto",
+                          backgroundRepeat: "repeat",
+                          backgroundPosition: 'center center',
+                      }} 
+                    />
+                  </div>
 
-                <Nav navVisible={navVisible} setNavVisible={setNavVisible} />
-                <div className="relative flex h-full max-w-full flex-1 flex-col overflow-hidden">
-                  <MobileNav setNavVisible={setNavVisible} />
-                  <Outlet context={{ navVisible, setNavVisible } satisfies ContextType} />
+                  <Nav navVisible={navVisible} setNavVisible={setNavVisible} />
+                  <div className="relative flex h-full max-w-full flex-1 flex-col overflow-hidden">
+                    <MobileNav setNavVisible={setNavVisible} />
+                    <Outlet context={{ navVisible, setNavVisible } satisfies ContextType} />
+                  </div>
                 </div>
               </div>
-            </div>
+              {config?.interface?.termsOfService?.modalAcceptance === true && (
+                <TermsAndConditionsModal
+                  open={showTerms}
+                  onOpenChange={setShowTerms}
+                  onAccept={handleAcceptTerms}
+                  onDecline={handleDeclineTerms}
+                  title={config.interface.termsOfService.modalTitle}
+                  modalContent={config.interface.termsOfService.modalContent}
+                />
+              )}
+            </MCPLoadingProvider>
           </AgentsMapContext.Provider>
-          {config?.interface?.termsOfService?.modalAcceptance === true && (
-            <TermsAndConditionsModal
-              open={showTerms}
-              onOpenChange={setShowTerms}
-              onAccept={handleAcceptTerms}
-              onDecline={handleDeclineTerms}
-              title={config.interface.termsOfService.modalTitle}
-              modalContent={config.interface.termsOfService.modalContent}
-            />
-          )}
         </AssistantsMapContext.Provider>
       </FileMapContext.Provider>
     </SetConvoProvider>

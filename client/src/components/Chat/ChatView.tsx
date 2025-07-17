@@ -18,6 +18,7 @@ import Landing from './Landing';
 import Header from './Header';
 import Footer from './Footer';
 import store from '~/store';
+import MCPLoadingContainer from './Messages/Content/MCPLoadingContainer';
 
 function LoadingSpinner() {
   return (
@@ -102,6 +103,7 @@ function ChatView({ index = 0 }: { index?: number }) {
                         isLandingPage && 'max-w-3xl transition-all duration-200 xl:max-w-4xl'
                       )}
                     >
+                      <MCPLoadingContainer className="mb-4" />
                       <ChatForm index={index} />
                       {isLandingPage ? <ConversationStarters /> : <Footer />}
                     </div>
