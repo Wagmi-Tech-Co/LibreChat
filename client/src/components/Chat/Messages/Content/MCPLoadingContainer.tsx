@@ -1,5 +1,5 @@
 import React from 'react';
-import { useMCPLoadingContext } from '~/Providers/MCPLoadingProvider';
+import { useMCPLoadingContextSafe } from '~/Providers/MCPLoadingProvider';
 import MCPLoadingIndicator from './MCPLoadingIndicator';
 import { Constants } from 'librechat-data-provider';
 
@@ -8,7 +8,7 @@ interface MCPLoadingContainerProps {
 }
 
 export default function MCPLoadingContainer({ className = '' }: MCPLoadingContainerProps) {
-  const { loadingStates } = useMCPLoadingContext();
+  const { loadingStates } = useMCPLoadingContextSafe();
 
   const activeStates = Array.from(loadingStates.entries());
 

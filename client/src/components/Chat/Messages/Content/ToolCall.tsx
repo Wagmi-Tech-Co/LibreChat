@@ -4,11 +4,12 @@ import { actionDelimiter, actionDomainSeparator, Constants } from 'librechat-dat
 import type { TAttachment } from 'librechat-data-provider';
 import { useLocalize, useProgress } from '~/hooks';
 import { AttachmentGroup } from './Parts';
+import { useShareContext } from '~/Providers';
 import ToolCallInfo from './ToolCallInfo';
 import ProgressText from './ProgressText';
 import { Button } from '~/components';
 import { logger, cn } from '~/utils';
-import { useMCPLoadingContext } from '~/Providers/MCPLoadingProvider';
+import { useMCPLoadingContextSafe } from '~/Providers/MCPLoadingProvider';
 
 export default function ToolCall({
   initialProgress = 0.1,
@@ -29,12 +30,13 @@ export default function ToolCall({
   expires_at?: number;
 }) {
   const localize = useLocalize();
+  const { isSharedConvo } = useShareContext();
   const [showInfo, setShowInfo] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
   const [contentHeight, setContentHeight] = useState<number | undefined>(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const prevShowInfoRef = useRef<boolean>(showInfo);
-  const { startLoading, stopLoading } = useMCPLoadingContext();
+  const { startLoading, stopLoading } = useMCPLoadingContextSafe();
 
   const { function_name, domain, isMCPToolCall } = useMemo(() => {
     if (typeof name !== 'string') {
@@ -165,6 +167,28 @@ export default function ToolCall({
       resizeObserver.disconnect();
     };
   }, [showInfo, isAnimating]);
+
+  // Show a special message for MCP tools in shared conversations
+  if (isSharedConvo && isMCPToolCall) {
+    return (
+      <div className="my-2.5 rounded-lg border border-blue-200 bg-blue-50 p-3 text-sm">
+        <div className="flex items-center gap-2 text-blue-700">
+          <div className="h-2 w-2 rounded-full bg-blue-500"></div>
+          <span className="font-medium">MCP Tool: {function_name}</span>
+          {domain && <span className="text-blue-600">({domain})</span>}
+        </div>
+        <p className="mt-1 text-blue-600">
+          Bu paylaşılan konuşmada MCP araç çağrısı görüntüleniyor. MCP araçları paylaşılan görünümde etkileşimli değildir.
+        </p>
+        {output && (
+          <div className="mt-2 rounded border border-blue-200 bg-white p-2 text-sm text-gray-700">
+            <div className="font-medium text-gray-900 mb-1">Sonuç:</div>
+            <div className="whitespace-pre-wrap">{output}</div>
+          </div>
+        )}
+      </div>
+    );
+  }
 
   return (
     <>

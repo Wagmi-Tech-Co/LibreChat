@@ -28,6 +28,25 @@ export const useMCPLoadingContext = () => {
   return context;
 };
 
+// Safe hook that doesn't throw error when provider is not available
+export const useMCPLoadingContextSafe = () => {
+  const context = useContext(MCPLoadingContext);
+  
+  // Provide default implementation when context is not available (e.g., in shared conversations)
+  if (!context) {
+    return {
+      loadingStates: new Map<string, MCPLoadingState>(),
+      startLoading: () => {}, // No-op for shared conversations
+      stopLoading: () => {}, // No-op for shared conversations
+      isLoading: () => false, // Always return false in shared conversations
+      getLoadingState: () => undefined, // No state available in shared conversations
+      clearAll: () => {}, // No-op for shared conversations
+    };
+  }
+  
+  return context;
+};
+
 interface MCPLoadingProviderProps {
   children: ReactNode;
 }
