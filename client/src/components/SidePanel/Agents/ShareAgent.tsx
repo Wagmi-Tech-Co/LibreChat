@@ -93,6 +93,16 @@ export default function ShareAgent({
     setValue('selectedUsers', sharedWithUsers || []);
   }, [agentIsGlobal, isCollaborative, sharedWithUsers, setValue]);
 
+  // Handle global sharing toggle changes
+  useEffect(() => {
+    if (sharedGlobalValue) {
+      // When global sharing is turned on, select all users
+      setValue('selectedUsers', allUsers.map((user) => user.id));
+    }
+    // When global sharing is turned off, preserve the currently selected users
+    // (don't clear them - let user manage individual selections)
+  }, [sharedGlobalValue, allUsers, setValue]);
+
   const updateAgent = useUpdateAgentMutation({
     onSuccess: (data) => {
       showToast({
@@ -119,27 +129,27 @@ export default function ShareAgent({
 
   const handleUserToggle = (userId: string, checked: boolean) => {
     const currentUsers = getValues('selectedUsers');
+    let newSelectedUsers: string[];
+    
     if (checked) {
-      setValue('selectedUsers', [...currentUsers, userId]);
+      newSelectedUsers = [...currentUsers, userId];
+      setValue('selectedUsers', newSelectedUsers);
+      
+      // If all users are now selected, turn on global sharing
+      if (newSelectedUsers.length === allUsers.length) {
+        setValue(Permissions.SHARED_GLOBAL, true);
+      }
     } else {
-      setValue(
-        'selectedUsers',
-        currentUsers.filter((id) => id !== userId),
-      );
+      newSelectedUsers = currentUsers.filter((id) => id !== userId);
+      setValue('selectedUsers', newSelectedUsers);
+      
+      // Turn off global sharing when deselecting users
+      if (getValues(Permissions.SHARED_GLOBAL)) {
+        setValue(Permissions.SHARED_GLOBAL, false);
+      }
     }
   };
 
-  const handleSelectAllToggle = () => {
-    const areAllUsersSelected = allUsers.length > 0 && selectedUsers.length === allUsers.length;
-    if (areAllUsersSelected) {
-      setValue('selectedUsers', []);
-    } else {
-      setValue(
-        'selectedUsers',
-        allUsers.map((user) => user.id),
-      );
-    }
-  };
 
   const onSubmit = (data: FormValues) => {
     if (!agent_id || !instanceProjectId) {
@@ -159,7 +169,11 @@ export default function ShareAgent({
         payload.projectIds = [startupConfig.instanceProjectId];
       } else {
         payload.removeProjectIds = [startupConfig.instanceProjectId];
-        payload.isCollaborative = false;
+        // Don't automatically set isCollaborative to false when turning off global sharing
+        // if there are still individual users selected
+        if (data.selectedUsers.length === 0) {
+          payload.isCollaborative = false;
+        }
       }
     }
 
@@ -344,20 +358,6 @@ export default function ShareAgent({
               />
             </div>
 
-            {/* Select All Toggle Button */}
-            <div className="mb-3 flex gap-2">
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={handleSelectAllToggle}
-                disabled={isLoadingUsers || allUsers.length === 0}
-              >
-                {allUsers.length > 0 && selectedUsers.length === allUsers.length
-                  ? localize('com_ui_deselect_all')
-                  : localize('com_ui_select_all')}
-              </Button>
-            </div>
 
             {/* User List */}
             <div className="max-h-48 overflow-y-auto rounded-lg border border-gray-200">

@@ -15,6 +15,7 @@ const {
   updateAgent,
   deleteAgent,
   getListAgents,
+  updateAgentSharedUsers,
 } = require('~/models/Agent');
 const { uploadImageBuffer, filterFile } = require('~/server/services/Files/process');
 const { getStrategyFunctions } = require('~/server/services/Files/strategies');
@@ -148,7 +149,7 @@ const getAgentHandler = async (req, res) => {
 const updateAgentHandler = async (req, res) => {
   try {
     const id = req.params.id;
-    const { projectIds, removeProjectIds, ...updateData } = req.body;
+    const { projectIds, removeProjectIds, sharedWithUsers, removeSharedUsers, ...updateData } = req.body;
     const isAdmin = req.user.role === SystemRoles.ADMIN;
     const existingAgent = await getAgent({ id });
     const isAuthor = existingAgent.author.toString() === req.user.id;
@@ -173,6 +174,15 @@ const updateAgentHandler = async (req, res) => {
         agentId: id,
         projectIds,
         removeProjectIds,
+      });
+    }
+
+    if (sharedWithUsers || removeSharedUsers) {
+      updatedAgent = await updateAgentSharedUsers({
+        user: req.user,
+        agentId: id,
+        sharedWithUsers,
+        removeSharedUsers,
       });
     }
 
